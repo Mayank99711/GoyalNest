@@ -5,7 +5,7 @@ Set-Location -LiteralPath $root
 Write-Host 'GoyalNest clean-machine setup; database is NOT modified by this script.' -ForegroundColor Cyan
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw 'Node.js 20.19+ required.' }
 if (-not (Get-Command npm -ErrorAction SilentlyContinue)) { throw 'npm executable missing.' }
-$v = @(node -p 'process.versions.node.split(".").slice(0,2).join(".")')
+$v = @((node --version).TrimStart('v'))
 $nums = ($v[0] -split '\.')
 $major = [int]$nums[0]; $minor=[int]$nums[1]
 if ($major -lt 20 -or ($major -eq 20 -and $minor -lt 19)) { throw ('Node.js 20.19+ required; found '+$v[0]) }
