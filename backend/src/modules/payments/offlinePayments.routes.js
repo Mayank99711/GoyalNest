@@ -22,7 +22,7 @@ const createSchema = z.object({
 const reviewSchema = z.object({
   status: z.enum(["UNDER_REVIEW", "DEPOSITED", "BANK_PENDING", "CLEARED", "BOUNCED", "REJECTED"]),
   reviewNote: z.string().max(1000).optional(), bankReference: z.string().max(120).optional(),
-  checklist: z.record(z.boolean()).optional(),
+  checklist: z.record(z.string(), z.boolean()).optional(),
 }).strict();
 function parse(schema, input) {
   const result = schema.safeParse(input);
