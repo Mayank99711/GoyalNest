@@ -1,0 +1,157 @@
+.dc-panel {
+  border: 1px solid #e2ebe5;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  color: #173d30;
+}
+
+.dc-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #e8eee9;
+}
+
+.dc-heading h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.dc-heading p {
+  margin: 0;
+  color: #78877f;
+  font-size: 12px;
+}
+
+.dc-refresh {
+  background: #f0f7f2;
+  border: 1px solid #d9e8dc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #1c563d;
+}
+
+.dc-messages {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 16px;
+  background: #fafcfb;
+}
+
+.dc-message {
+  background: white;
+  border: 1px solid #e4ebe6;
+  border-radius: 11px;
+  padding: 13px;
+  margin-bottom: 12px;
+}
+
+.dc-message-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.dc-message-meta time {
+  margin-left: auto;
+  color: #8a958d;
+  font-size: 11px;
+}
+
+.dc-message p {
+  margin: 11px 0 0;
+  color: #3a5143;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.dc-role {
+  background: #e8f4ec;
+  color: #20583f;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.dc-empty {
+  text-align: center;
+  color: #829087;
+  font-size: 13px;
+  padding: 20px;
+}
+
+.dc-compose {
+  padding: 16px;
+}
+
+.dc-compose label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 9px;
+}
+
+.dc-compose textarea {
+  width: 100%;
+  border: 1px solid #d5e1d8;
+  border-radius: 9px;
+  padding: 12px;
+  font: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.dc-compose textarea:focus {
+  outline: 2px solid #d1eadd;
+  border-color: #25845b;
+}
+
+.dc-compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.dc-compose-footer small {
+  color: #8a958d;
+}
+
+.dc-compose-footer button {
+  border: none;
+  border-radius: 9px;
+  padding: 10px 17px;
+  background: #174c38;
+  color: white;
+  cursor: pointer;
+}
+
+.dc-compose-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dc-closed {
+  margin: 0;
+  padding: 17px;
+  background: #f3f6f3;
+  color: #7c877e;
+  font-size: 12px;
+}
+
+.dc-error {
+  margin: 12px;
+  background: #fff0f0;
+  color: #9a3030;
+  padding: 11px;
+  border-radius: 8px;
+}

@@ -1,0 +1,723 @@
+.public-home {
+  min-height: 100vh;
+  background: #f7f4ee;
+  color: #102b31;
+}
+
+.public-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 7%;
+  background: #fff;
+}
+
+.public-logo {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: bold;
+  color: #143e32;
+  text-decoration: none;
+}
+
+.public-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.public-header nav a {
+  color: #26463e;
+  text-decoration: none;
+}
+
+.public-login {
+  padding: 12px 28px;
+  border: 1px solid #216f68;
+  border-radius: 8px;
+  background: #fff;
+  color: #16483e;
+  cursor: pointer;
+}
+
+.public-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 35px;
+  padding: 85px 7%;
+  min-height: 540px;
+}
+
+.hero-label,
+.section-label {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #216f68;
+}
+
+.hero-content h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.1;
+  margin: 22px 0;
+}
+
+.hero-content p {
+  font-size: 18px;
+  line-height: 1.8;
+  max-width: 540px;
+  color: #54706b;
+}
+
+.public-cta {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 16px 30px;
+  background: #216f68;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.hero-visual {
+  min-height: 370px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #d8e5dc, #b6d2ca);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.hero-house {
+  font-size: 180px;
+  color: #216f68;
+  line-height: 1;
+}
+
+.hero-visual span {
+  letter-spacing: 3px;
+  font-size: 12px;
+}
+
+.public-section {
+  padding: 70px 7%;
+  background: white;
+}
+
+.public-section:nth-of-type(even) {
+  background: #f7f4ee;
+}
+
+.public-section h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(28px, 3vw, 42px);
+  margin: 15px 0 35px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.category-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.category-card {
+  background: #f7f9f6;
+  padding: 28px;
+  border: 1px solid #e1e8e2;
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.category-card h3 {
+  margin: 16px 0 8px;
+}
+
+.category-card p {
+  color: #647b74;
+  line-height: 1.6;
+}
+
+.category-icon {
+  font-size: 38px;
+  color: #216f68;
+}
+
+.public-footer {
+  background: #102b31;
+  color: white;
+  padding: 45px 7%;
+}
+
+.public-footer p,
+.public-footer small {
+  color: #c5d4cb;
+}
+
+@media (max-width: 850px) {
+  .public-header nav {
+    display: none;
+  }
+
+  .public-hero {
+    grid-template-columns: 1fr;
+    padding-top: 55px;
+  }
+
+  .category-grid,
+  .category-grid.three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .category-grid,
+  .category-grid.three {
+    grid-template-columns: 1fr;
+  }
+}
+.tabbar a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.tabbar a.active {
+  background: #216f68;
+  color: white;
+}
+
+/* Homepage and Marketplace Search */
+
+.homepage-search,
+.market-filter-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.homepage-search {
+  margin-top: 28px;
+  padding: 18px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(16, 43, 49, 0.08);
+}
+
+.homepage-search label,
+.market-filter-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #244f46;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.homepage-search input,
+.homepage-search select,
+.market-filter-grid input,
+.market-filter-grid select {
+  width: 100%;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #d9e2db;
+  border-radius: 8px;
+  background: #fff;
+  color: #102b31;
+}
+
+.homepage-search button {
+  margin: 0;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.market-search-section {
+  padding: 45px 7%;
+  background: #f7f4ee;
+}
+
+.market-search-section h2 {
+  margin: 12px 0;
+  font-family: Georgia, serif;
+  font-size: 34px;
+}
+
+.market-filter-grid {
+  margin-top: 25px;
+}
+
+@media (max-width: 1100px) {
+  .homepage-search,
+  .market-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .homepage-search,
+  .market-filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== GOYALNEST MARKETPLACE UI ===== */
+
+.marketplace-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8faf8;
+}
+
+.marketplace-page > .section {
+  padding: 48px 5% 80px;
+}
+
+.marketplace-page .property-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+.marketplace-page .property-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e4eae5;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(16, 43, 49, 0.05);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.marketplace-page .property-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(16, 43, 49, 0.12);
+}
+
+.marketplace-page .property-cover {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #83a495, #183f35);
+  background-position: center;
+  background-size: cover;
+}
+
+.marketplace-page .property-type {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 8px 13px;
+  border-radius: 30px;
+  background: #fff;
+  color: #164a40;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.marketplace-page .cover-mark {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 52px;
+}
+
+.marketplace-page .property-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+
+.marketplace-page .property-body h3 {
+  margin: 10px 0;
+  font-family: Georgia, serif;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.marketplace-page .property-body > .muted {
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.marketplace-page .amenities {
+  margin-top: 15px;
+  color: #58746d;
+  font-size: 13px;
+}
+
+.marketplace-page .property-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #edf0ec;
+}
+
+.marketplace-page .property-footer strong {
+  color: #123d34;
+  font-size: 21px;
+}
+
+.marketplace-page .property-footer small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #81928c;
+}
+
+.marketplace-page .property-footer button {
+  cursor: pointer;
+}
+
+.marketplace-page .empty {
+  padding: 65px 20px;
+  text-align: center;
+  background: #fff;
+  border: 1px dashed #cedbd3;
+  border-radius: 16px;
+  color: #688078;
+}
+
+@media (max-width: 1100px) {
+  .marketplace-page .property-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .marketplace-page .property-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .marketplace-page > .section {
+    padding: 30px 18px 60px;
+  }
+
+  .marketplace-page .property-cover {
+    height: 205px;
+  }
+
+  .marketplace-page .property-body {
+    padding: 20px;
+  }
+}
+
+/* ===== GOYALNEST PROPERTY DETAILS MODAL ===== */
+
+.marketplace-page .modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 25, 29, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.marketplace-page .modal {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 36px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+}
+
+.marketplace-page .modal h2 {
+  font-family: Georgia, serif;
+  color: #102b31;
+  font-size: 32px;
+  margin: 12px 0;
+}
+
+.marketplace-page .modal h3 {
+  font-family: Georgia, serif;
+  font-size: 23px;
+  color: #102b31;
+  margin-top: 26px;
+  margin-bottom: 16px;
+}
+
+.marketplace-page .modal > p {
+  color: #637d75;
+  line-height: 1.7;
+}
+
+.marketplace-page .modal .close {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #eef3ef;
+  color: #102b31;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.marketplace-page .modal .close:hover {
+  background: #dfe9e1;
+}
+
+.marketplace-page .modal .eyebrow {
+  color: #b98a45;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.marketplace-page .modal .btn.primary {
+  background: #216f68;
+  color: #ffffff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.marketplace-page .modal .btn.primary:hover {
+  background: #174d48;
+}
+
+@media (max-width: 650px) {
+  .marketplace-page .modal-backdrop {
+    padding: 10px;
+  }
+
+  .marketplace-page .modal {
+    max-height: 94vh;
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  .marketplace-page .modal h2 {
+    font-size: 25px;
+  }
+}
+.marketplace-page .unit-information {
+  display: grid;
+  gap: 6px;
+  padding: 12px 0;
+}
+
+.marketplace-page .unit-information p {
+  margin: 0;
+  color: #526f66;
+  font-size: 14px;
+}
+
+.marketplace-page .unit-information strong {
+  color: #216f68;
+  font-size: 19px;
+}
+
+/* GoyalNest Property Gallery */
+
+.gn-public-gallery {
+  margin: 20px 0;
+}
+
+.gn-gallery-main {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 15px;
+  background: #e8eeea;
+}
+
+.gn-gallery-thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.gn-gallery-thumbnails button {
+  flex: 0 0 85px;
+  height: 65px;
+  padding: 0;
+  overflow: hidden;
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.gn-gallery-thumbnails button.active {
+  border-color: #216f68;
+}
+
+.gn-gallery-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gn-gallery-placeholder {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  background: linear-gradient(135deg, #dce9e0, #b8cfc4);
+  border-radius: 15px;
+  color: #216f68;
+  text-align: center;
+}
+
+.gn-gallery-placeholder span {
+  font-size: 65px;
+}
+
+.gn-upload-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.gn-upload-button {
+  display: inline-block;
+  padding: 13px 20px;
+  background: #216f68;
+  color: white;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.gn-owner-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.gn-owner-photo {
+  overflow: hidden;
+  border: 1px solid #e2e9e3;
+  border-radius: 12px;
+}
+
+.gn-owner-photo img {
+  display: block;
+  width: 100%;
+  height: 145px;
+  object-fit: cover;
+}
+
+.gn-owner-photo button {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  color: #a43c3c;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  .gn-gallery-main {
+    height: 240px;
+  }
+
+  .gn-owner-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.gn-cover-label {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background: #e8f4ed;
+  color: #216f68;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.gn-owner-photo button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gn-owner-photo button:hover:not(:disabled) {
+  background: #eef3ef;
+}
+/* Owner Gallery Card Improvements */
+
+.gn-owner-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 220px));
+  gap: 18px;
+  justify-content: start;
+}
+
+.gn-owner-photo {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #e2e9e3;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.gn-owner-photo img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.gn-owner-photo button,
+.gn-cover-label {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  text-align: center;
+}
+
+.gn-cover-label {
+  background: #e8f4ed;
+  color: #216f68;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .gn-owner-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* hhh  */

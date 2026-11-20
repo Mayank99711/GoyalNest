@@ -1,0 +1,4 @@
+.gnl-search-form .gnl-location-field { display:block; padding:11px 20px; border-right:1px solid #e7e5de; min-width:0; position:relative; z-index:50; }
+.gnl-search-form .gnl-location-field > span { display:block; font-size:9px; letter-spacing:.16em; color:#a09079; font-weight:700; margin-bottom:11px; }
+.gnl-search-form .gnl-location-field input { font-size:14px; outline:none; }
+@media(max-width:570px){.gnl-search-form .gnl-location-field {padding:17px;border-right:0;border-bottom:1px solid #e6e5df;}.gnl-search-form .gnl-location-field input{font-size:16px;}}

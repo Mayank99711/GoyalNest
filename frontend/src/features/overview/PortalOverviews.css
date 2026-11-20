@@ -1,0 +1,60 @@
+/* Scoped to Overview screens: do not change other portal modules. */
+.gnov-root { color: #183a30; max-width: 1450px; margin: 0 auto; padding: 8px 0 32px; }
+.gnov-root * { box-sizing: border-box; }
+.gnov-intro { margin: 6px 0 26px; }
+.gnov-kicker { color: #ac8f5c; font-size: 10px; letter-spacing: .18em; font-weight: 800; }
+.gnov-intro h2 { font-family: Georgia,serif; font-size: clamp(27px, 3.5vw, 39px); font-weight: 500; letter-spacing: -.025em; margin: 10px 0 8px; }
+.gnov-intro p { color: #71837a; font-size: 14px; line-height: 1.7; margin: 0; }
+.gnov-tiles { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin-bottom: 20px; }
+.gnov-tile { background: #fff; border: 1px solid #e6ebe6; border-radius: 15px; padding: 23px 20px; min-height: 135px; box-shadow: 0 8px 24px rgba(20,45,35,.035); }
+.gnov-tile span { color: #718379; display: block; font-size: 12px; font-weight: 600; }
+.gnov-tile strong { display: block; font-size: clamp(24px,2.1vw,32px); font-weight: 700; margin: 12px 0 4px; line-height: 1.2; overflow-wrap: anywhere; }
+.gnov-tile small { color: #8c9b90; font-size: 11px; }
+.gnov-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; align-items: start; }
+.gnov-panel { background: #fff; border: 1px solid #e6ebe6; border-radius: 16px; padding: 26px; min-width: 0; box-shadow: 0 8px 24px rgba(20,45,35,.025); }
+.gnov-panel h3 { margin: 0 0 5px; font-family: Georgia,serif; font-size: 23px; font-weight: 500; }
+.gnov-hint, .gnov-muted { color: #8a968e; font-size: 12px; margin: 0 0 21px; line-height: 1.6; }
+.gnov-tasklist, .gnov-actions { display: flex; flex-direction: column; gap: 8px; }
+.gnov-task, .gnov-action { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fbfcfa; border: 1px solid #edf0ec; border-radius: 11px; padding: 15px; text-align: left; color: #1f4134; cursor: pointer; transition: background .2s,border-color .2s,transform .2s; }
+.gnov-task:hover, .gnov-action:hover { background: #f1f7f2; border-color: #c9d8ce; transform: translateY(-1px); }
+.gnov-task strong,.gnov-action strong { display: block; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.gnov-task small,.gnov-action small { display: block; font-size: 11px; color: #83938a; margin-top: 5px; line-height: 1.5; }
+.gnov-status { white-space: nowrap; font-size: 10px; font-weight: 700; color: #85612e; background: #fff5e2; border-radius: 20px; padding: 6px 9px; }
+.gnov-action > span:last-child { font-size: 18px; color: #a68d68; }
+.gnov-empty { padding: 25px; background: #f7faf7; color: #6d8676; border-radius: 10px; text-align: center; font-size: 13px; }
+.gnov-error { border: 1px solid #e7c4b8; background: #fff8f5; color: #a14630; padding: 12px 16px; border-radius: 9px; margin-bottom: 18px; font-size: 12px; }
+@media (max-width: 1100px) { .gnov-tiles { grid-template-columns: repeat(2,minmax(0,1fr)); } .gnov-layout { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .gnov-tiles { gap: 10px; } .gnov-tile { padding: 16px 13px; min-height: 115px; } .gnov-panel { padding: 18px; } .gnov-intro h2 { font-size: 29px; } }
+@media (prefers-reduced-motion: reduce) { .gnov-task,.gnov-action { transition:none; } }
+
+.gnov-tile-link{display:block;text-decoration:none;color:inherit}.gnov-tile-link:hover,.gnov-tile-link:focus-visible{border-color:#94b6a0;background:#f7faf7;outline-offset:2px}
+
+/* GoyalNest V6.2 — professional workspace polish shared by owner / manager overviews. */
+.gnov-root{padding-top:4px;padding-bottom:44px}
+.gnov-intro{padding:4px 0 7px;margin-bottom:23px}
+.gnov-intro h2{color:#123b2e;line-height:1.13;letter-spacing:-.035em}
+.gnov-tiles{gap:14px}
+.gnov-tile{position:relative;min-height:130px;background:linear-gradient(155deg,#ffffff 67%,#f4f8f3);border-color:#dfebe2;box-shadow:0 9px 26px rgba(17,54,39,.045);transition:transform .2s,border-color .2s,box-shadow .2s}
+.gnov-tile:before{content:"";display:block;width:30px;height:3px;border-radius:3px;background:#bd9863;margin-bottom:15px}
+.gnov-tile:hover{transform:translateY(-2px);border-color:#a1c6ac;box-shadow:0 12px 28px rgba(17,54,39,.09)}
+.gnov-tile strong{margin:9px 0 4px;color:#173f32;font-variant-numeric:tabular-nums}
+.gnov-panel{border-radius:18px;border-color:#e1ebe2;box-shadow:0 10px 30px rgba(22,57,39,.035)}
+.gnov-task:focus-visible,.gnov-action:focus-visible,.gnov-tile-link:focus-visible{outline:3px solid #9dc5a9;outline-offset:2px}
+@media(max-width:540px){.gnov-root{padding-bottom:25px}.gnov-tile:before{margin-bottom:10px}.gnov-tile{min-height:114px}}
+@media(prefers-reduced-motion:reduce){.gnov-tile{transition:none}}
+
+/* Action history backed only by successful/failed API mutations in this browser session. */
+.gnov-session-activity{margin-top:20px}.gnov-session-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.gnov-session-label{letter-spacing:.12em;font-size:10px;color:#937b51;font-weight:700;white-space:nowrap}.gnov-session-activity ul{list-style:none;margin:12px 0 0;padding:0}.gnov-session-activity li{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #eef1ec;font-size:12px;color:#244a37}.gnov-session-activity li>span:nth-child(2){flex:1;overflow-wrap:anywhere}.gnov-session-activity time{color:#8b9b90;white-space:nowrap}.gnov-activity-success,.gnov-activity-error{font-weight:800;color:#21784e}.gnov-activity-error{color:#b33e34}@media(max-width:580px){.gnov-session-label{display:none}}
+
+/* Professional role-based dashboard and action center */
+.gnov-root{max-width:1440px;padding:4px 0 48px;color:#173d30}
+.gnov-hero{border-radius:22px;padding:30px 34px;margin:3px 0 18px;background:linear-gradient(112deg,#153f32 0%,#245d49 65%,#386e56 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;box-shadow:0 18px 35px rgba(18,54,40,.12)}
+.gnov-hero .gnov-kicker{color:#dfc792}.gnov-hero h2{font-family:Georgia,serif;font-size:clamp(28px,3.1vw,42px);font-weight:500;letter-spacing:-.035em;margin:10px 0}.gnov-hero p{font-size:13px;line-height:1.65;color:#e0eee7;max-width:580px;margin:0}
+.gnov-refresh{border:1px solid #b4d0c1;color:#fff;border-radius:12px;background:#ffffff18;padding:12px 18px;font-weight:700;cursor:pointer;white-space:nowrap}.gnov-refresh:hover{background:#ffffff30}.gnov-refresh:disabled{opacity:.6;cursor:wait}
+.gnov-attention-bar{background:#f7f9f4;border:1px solid #dce8de;border-radius:15px;display:flex;gap:15px;align-items:center;padding:18px 20px;margin-bottom:20px}.gnov-attention-icon{background:#e7f0e9;border-radius:10px;color:#2b634a;font-weight:800;display:grid;place-items:center;width:40px;height:40px;flex-shrink:0}.gnov-attention-bar strong{display:block;font-size:15px}.gnov-attention-bar small{display:block;color:#71847b;line-height:1.5;margin-top:3px}.gnov-live-dot{font-size:10px;letter-spacing:.1em;color:#6f8d7d;margin-left:auto;white-space:nowrap}
+.gnov-tiles{margin-bottom:18px}.gnov-tile{min-height:132px;padding:22px}.gnov-tile span{font-size:12px}.gnov-tile strong{font-size:clamp(24px,2.3vw,34px)}
+.gnov-layout{grid-template-columns:minmax(0,1.35fr) minmax(310px,.85fr)}.gnov-side-stack{min-width:0;display:grid;gap:18px}.gnov-panel{padding:24px}.gnov-panel h3{font-size:22px}
+.gnov-task{padding:15px 13px}.gnov-task-mark{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:#e7f0e9;color:#366e52;font-weight:800;font-size:12px;flex-shrink:0}.gnov-task-copy{flex:1;min-width:0}.gnov-chevron{color:#698578;font-size:24px}.gnov-notice-list{display:grid;gap:8px;margin-bottom:12px}.gnov-notice{padding:13px;border:1px solid #edf1ec;border-radius:10px;background:#fbfcfa}.gnov-notice.is-unread{border-left:3px solid #46805e;background:#f6faf6}.gnov-notice strong{font-size:12px}.gnov-notice p{font-size:11px;color:#657e6f;line-height:1.6;margin:5px 0}.gnov-notice small{font-size:10px;color:#9ca99e}.gnov-inline-link{border:0;background:transparent;color:#175e40;font-size:12px;font-weight:750;cursor:pointer;padding:8px 0;text-align:left}
+@media(max-width:1100px){.gnov-layout{grid-template-columns:1fr}.gnov-side-stack{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.gnov-hero{padding:23px;flex-direction:column;align-items:flex-start}.gnov-hero h2{font-size:30px}.gnov-side-stack{grid-template-columns:1fr}.gnov-live-dot{display:none}}
+@media(max-width:520px){.gnov-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.gnov-task{flex-wrap:wrap}.gnov-status{margin-left:auto}.gnov-panel{padding:17px}.gnov-hero{border-radius:16px}}

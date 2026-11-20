@@ -1,0 +1,7 @@
+import React,{createContext,useContext,useEffect,useState} from 'react';import {api} from '../lib/api';import {claimPortal,clearPortal,currentPortal,subscribePortalChanges} from '../features/auth/portalLock';
+const AuthContext=createContext(null);export const useAuth=()=>useContext(AuthContext);
+export function AuthProvider({children}){const [user,setUser]=useState(null),[loading,setLoading]=useState(true);
+useEffect(()=>{api('/auth/me').then(({user})=>{const lock=currentPortal();if(lock&&lock.role!==user.role){api('/auth/logout',{method:'POST'}).finally(()=>setUser(null));return;}claimPortal(user.role,user.email);setUser(user);}).catch(()=>{setUser(null);clearPortal();}).finally(()=>setLoading(false));return subscribePortalChanges(lock=>{if(user&&(!lock||lock.role!==user.role)){api('/auth/logout',{method:'POST'}).finally(()=>setUser(null));}});},[user?.id]);
+async function login(email,password,portalRole){const lock=currentPortal();if(lock&&lock.role!==portalRole)throw Error(`The ${lock.role} portal is already active in this browser. Logout before switching portals.`);const data=await api('/auth/login',{method:'POST',body:{email,password,portalRole}});claimPortal(data.user.role,data.user.email);setUser(data.user);return data.user;}
+async function logout(){try{await api('/auth/logout',{method:'POST'});}finally{clearPortal();setUser(null);}}
+return <AuthContext.Provider value={{user,loading,login,logout,refresh:()=>api('/auth/me').then(d=>setUser(d.user))}}>{children}</AuthContext.Provider>}

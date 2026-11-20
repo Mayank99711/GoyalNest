@@ -1,0 +1,19 @@
+name: Source checks
+on:
+  push:
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/preflight.mjs
+        env:
+          CI: 'true'
+      - run: node scripts/source-check.mjs
+      - run: node scripts/smoke-test.mjs
+      - run: npm ci --prefix frontend
+      - run: npm --prefix frontend run build

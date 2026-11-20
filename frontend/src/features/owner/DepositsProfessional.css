@@ -1,0 +1,25 @@
+/* Deposits & Refunds: section-scoped styling; no change to workflow actions or API calls. */
+.gn-deposits-pro{display:grid;gap:22px;max-width:1260px;margin:0 auto;padding:0 0 35px;min-width:0;color:#19392f}
+.gn-deposits-pro .gn-deposits-intro{background:linear-gradient(120deg,#eef5ee,#faf8f2);border:1px solid #e2ebe0;border-radius:18px;padding:24px 27px}
+.gn-deposits-pro .gn-deposits-intro .gn-kicker{font-size:11px;font-weight:800;letter-spacing:.16em;color:#9e7c49;text-transform:uppercase}
+.gn-deposits-pro .gn-deposits-intro h2{font:700 clamp(25px,3vw,35px)/1.2 Georgia,serif;color:#14382e;margin:10px 0 7px}
+.gn-deposits-pro .gn-deposits-intro p{margin:0;color:#62786f;line-height:1.65}
+.gn-deposits-pro .gn-deposits-jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.gn-deposits-pro .gn-deposits-jump a{background:#fff;border:1px solid #d9e5dc;color:#1e5943;text-decoration:none;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:750}
+.gn-deposits-pro .gn-deposits-jump a:hover,.gn-deposits-pro .gn-deposits-jump a:focus-visible{background:#e3f1e7;outline-color:#8bbda1}
+.gn-deposits-pro .gn-deposits-section{background:#fff;border:1px solid #e1eae2;border-radius:19px;box-shadow:0 10px 30px rgba(24,61,45,.045);padding:clamp(19px,3vw,28px);min-width:0;scroll-margin-top:24px}
+.gn-deposits-pro .gn-deposits-section > section,.gn-deposits-pro .gn-deposits-section > div{max-width:none!important;margin-top:0!important}
+.gn-deposits-pro .gn-deposits-section h2{font:700 clamp(22px,2.6vw,29px)/1.25 Georgia,serif;margin:0 0 9px;color:#143c30}
+.gn-deposits-pro .gn-deposits-section h3{font-size:18px;color:#173e32;margin:0 0 12px}
+.gn-deposits-pro .gn-deposits-section h4{font-size:15px;color:#214e3e;margin:0 0 9px}
+.gn-deposits-pro .gn-deposits-section p{line-height:1.6;overflow-wrap:anywhere}
+.gn-deposits-pro .gn-deposits-section > section > .muted,.gn-deposits-pro .gn-deposits-section > div > .muted{color:#6a8178;margin:0 0 16px}
+.gn-deposits-pro .gn-deposits-section .card{border:1px solid #dfeae2;border-radius:14px;box-shadow:none;background:#fcfdfb}
+.gn-deposits-pro .gn-deposits-section .card h3{color:#143e31}
+.gn-deposits-pro .gn-deposits-section .record-list{display:grid;gap:14px;min-width:0}
+.gn-deposits-pro .gn-deposits-section .record{background:#fcfdfb;border:1px solid #dfeae2;border-radius:14px;padding:18px;min-width:0}
+.gn-deposits-pro .gn-deposits-section input,.gn-deposits-pro .gn-deposits-section textarea{border-radius:10px;border:1px solid #d3e1d8;max-width:100%}
+.gn-deposits-pro .gn-deposits-section .btn{border-radius:10px;min-height:40px}
+.gn-deposits-pro .gn-deposits-section .notice{border-radius:12px}
+.gn-deposits-pro .gn-deposits-important{background:#fff8e9;border:1px solid #f1dfb6;border-radius:12px;padding:12px 15px;color:#765b25;line-height:1.6;font-size:13px}
+@media(max-width:650px){.gn-deposits-pro .gn-deposits-intro{padding:20px}.gn-deposits-pro .gn-deposits-section{padding:17px}.gn-deposits-pro .gn-deposits-jump a{flex:1;text-align:center}}

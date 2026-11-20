@@ -1,0 +1,163 @@
+.manager-operations {
+  width: 100%;
+  max-width: 1300px;
+  display: grid;
+  gap: 22px;
+}
+
+.mgr-heading,
+.mgr-property-row,
+.mgr-room-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mgr-heading h2 {
+  color: #173f34;
+  font-family: Georgia, serif;
+  margin: 0 0 8px;
+}
+
+.mgr-heading p,
+.mgr-property-row p,
+.mgr-room-card p,
+.mgr-note {
+  color: #73867c;
+  font-size: 13px;
+}
+
+.mgr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 15px;
+}
+
+.mgr-stat,
+.mgr-panel {
+  background: white;
+  border: 1px solid #e1e8e3;
+  border-radius: 15px;
+  padding: 22px;
+  min-width: 0;
+}
+
+.mgr-stat {
+  display: grid;
+  gap: 14px;
+}
+
+.mgr-stat span,
+.mgr-details span {
+  color: #70867b;
+  font-size: 12px;
+}
+
+.mgr-stat strong {
+  color: #173f34;
+  font-size: 28px;
+  font-family: Georgia, serif;
+}
+
+.mgr-panel h3 {
+  color: #173f34;
+  margin: 0 0 18px;
+}
+
+.mgr-property-row {
+  border-top: 1px solid #edf1ed;
+  padding: 16px 0;
+}
+
+.mgr-property-grid,
+.mgr-room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.mgr-details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.mgr-progress {
+  height: 9px;
+  overflow: hidden;
+  background: #edf2ee;
+  border-radius: 20px;
+}
+
+.mgr-progress div {
+  height: 100%;
+  background: #246d54;
+  border-radius: inherit;
+}
+
+.mgr-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mgr-filters select,
+.mgr-filters input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #dce5df;
+  border-radius: 10px;
+  font: inherit;
+  background: white;
+}
+
+.mgr-room-card {
+  padding: 18px;
+  border: 1px solid #e1e8e3;
+  border-radius: 12px;
+}
+
+.mgr-room-top strong {
+  color: #173f34;
+}
+
+.mgr-room-top span {
+  padding: 6px 10px;
+  border-radius: 15px;
+  background: #edf5ee;
+  color: #246d54;
+  font-size: 11px;
+}
+
+.mgr-room-card h4 {
+  color: #173f34;
+  margin: 16px 0 8px;
+}
+
+.mgr-occupant {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid #edf1ed;
+  font-size: 13px;
+}
+
+.mgr-occupant small {
+  color: #778c80;
+}
+
+@media (max-width: 650px) {
+  .mgr-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .mgr-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

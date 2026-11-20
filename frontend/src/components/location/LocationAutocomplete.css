@@ -1,0 +1,22 @@
+.gn-location-root { position: relative; min-width: 0; flex: 1; }
+.gn-location-trigger { display: flex; align-items: center; gap: 9px; width: 100%; min-width: 0; }
+.gn-location-trigger input { width: 100%; min-width: 0; font: inherit; color: #324a3f; }
+.gn-location-clear { background: transparent; border: 0; cursor: pointer; color: #61766b; padding: 5px; }
+.gn-location-desktop { position: absolute; left: -34px; right: -16px; top: calc(100% + 24px); z-index: 200; background: #fff; box-shadow: 0 20px 48px #17372c25; border: 1px solid #e7e7df; border-radius: 12px; padding: 6px; }
+.gn-location-options { max-height: 300px; overflow-y: auto; overscroll-behavior: contain; }
+.gn-location-choice { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; background: transparent; border: 0; border-radius: 7px; padding: 13px; color: #244639; cursor: pointer; font: inherit; }
+.gn-location-choice:hover, .gn-location-choice.is-active { background: #eff4ef; }
+.gn-location-empty { padding: 18px; color: #60736a; font-size: 14px; }
+.gn-location-mobile { display: none; }
+.gnl-search-form .gn-location-root input { height: 36px; }
+@media (max-width: 650px) {
+  .gn-location-desktop { display: none; }
+  .gn-location-mobile { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 99999; overflow: auto; background: #faf9f5; padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)); }
+  .gn-location-mobile header { display: flex; justify-content: space-between; align-items: center; padding: 8px 2px 16px; color: #1a4335; }
+  .gn-location-mobile header button { background: none; border: none; color: #1a4335; padding: 8px; }
+  .gn-location-mobile-search { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid #d9e1d9; background: white; border-radius: 12px; }
+  .gn-location-mobile-search input { border: 0; outline: 0; background: white; flex: 1; min-width: 0; font-size: 16px; }
+  .gn-location-mobile p { font-size: 11px; letter-spacing: .12em; color: #7a846e; margin: 26px 4px 10px; }
+  .gn-location-mobile .gn-location-options { max-height: none; }
+  .gn-location-choice { min-height: 48px; }
+}

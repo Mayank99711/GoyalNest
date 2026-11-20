@@ -1,0 +1,23 @@
+/* Isolated Tenant Portal feature styles — no global dashboard overrides */
+.tp-page{display:grid;gap:22px;max-width:1220px;margin:0 auto;padding:8px 0 28px;color:#213c32}
+.tp-heading>span{font-size:11px;letter-spacing:.19em;color:#a48859;font-weight:700}
+.tp-heading h2{font-family:Georgia,serif;font-size:clamp(29px,3vw,42px);font-weight:500;margin:8px 0;color:#1b4234}
+.tp-heading p,.tp-muted,.tp-hint{color:#75857d;line-height:1.6;font-size:13px}
+.tp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.tp-panel{padding:25px;background:#fff;border:1px solid #e2e9e1;border-radius:16px;box-shadow:0 10px 34px rgba(21,56,40,.045);min-width:0}
+.tp-panel h3{font-size:19px;color:#203f33;margin:0 0 17px}
+.tp-form{display:grid;gap:17px}
+.tp-form label{display:grid;gap:8px;font-size:12px;font-weight:700;color:#3a5846}
+.tp-form input,.tp-form select,.tp-form textarea{width:100%;padding:12px 13px;border-radius:9px;border:1px solid #cfdcd1;background:#fff;color:#243c30;font:inherit;box-sizing:border-box}
+.tp-form input:focus,.tp-form select:focus,.tp-form textarea:focus{outline:2px solid #c8ead6;border-color:#2d7854}
+.tp-form input:disabled{background:#f4f6f3;color:#62746a}
+.tp-form small{font-size:11px;color:#74877c;font-weight:400}
+.tp-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tp-button,.tp-outline{border:1px solid #1e503a;border-radius:9px;padding:11px 16px;cursor:pointer;font-weight:700;font-size:12px;white-space:nowrap}
+.tp-button{background:#1e503a;color:white}.tp-outline{color:#1e503a;background:white}
+.tp-button:disabled,.tp-outline:disabled{opacity:.55;cursor:default}
+.tp-alert,.tp-success{border-radius:9px;padding:12px 15px;font-size:13px}.tp-alert{background:#fff0f0;color:#a42727}.tp-success{background:#eaf7ef;color:#266a43}
+.tp-stack{display:grid;gap:14px}.tp-record{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #e9ede8;padding:15px 0}.tp-record:last-child{border-bottom:0}.tp-record p{font-size:12px;margin:8px 0;color:#718378}
+.tp-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.tp-between{justify-content:space-between}.tp-status{border-radius:30px;padding:7px 12px;background:#e9f0e8;color:#365a42;font-size:10px;font-weight:800;letter-spacing:.045em}.tp-requested,.tp-pending_payment,.tp-vacating{background:#fff3db;color:#825912}.tp-cancelled,.tp-declined{background:#fceaea;color:#9a3535}.tp-confirmed,.tp-completed,.tp-active{background:#e4f5e8;color:#246341}.tp-empty{text-align:center;color:#78867b}
+.tp-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.tp-detail-grid>div{display:grid;gap:5px}.tp-detail-grid span{font-size:11px;color:#7b897d}.tp-detail-grid strong{font-size:13px}.tp-inline{margin-top:15px}.tp-payment-existing{min-width:0}
+@media(max-width:760px){.tp-grid,.tp-form-grid{grid-template-columns:1fr}.tp-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tp-record{align-items:flex-start;flex-direction:column}.tp-panel{padding:19px}}

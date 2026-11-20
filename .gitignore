@@ -1,0 +1,58 @@
+node_modules/
+.env
+.env.*
+!.env.example
+backend/node_modules/
+frontend/node_modules/
+frontend/dist/
+*.log
+.DS_Store
+coverage/
+private-storage/
+*.dump
+# GoyalNest mentor submission additions
+# GoyalNest secrets and developer files
+.env
+.env.*
+!.env.example
+!.env.sample
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+coverage/
+*.log
+.DS_Store
+.vscode/
+.idea/
+.gn-backups/
+backend/uploads/
+backend/prisma/*.db
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
+*.bak
+*.backup
+*.dump
+*.sql.gz
+
+
+# GoyalNest pre-GitHub safety additions (2026-11-20)
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+!backend/.env.example
+!frontend/.env.example
+backend/private-storage/
+.goyalnest_*_backup_*/
+
+
+# Local patch archives and rollback data
+.goyalnest-patch-backups/
+
+# Local private files

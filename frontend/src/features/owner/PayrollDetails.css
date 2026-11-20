@@ -1,0 +1,22 @@
+/* Scoped payroll history and payslip details. No long free-text notes inside table cells. */
+.gn-payroll-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 16px}
+.gn-payroll-section-heading h3{font-family:Georgia,serif;font-size:19px;color:#183d30;margin:0}
+.gn-payroll-section-heading p{font-size:12px;color:#788d80;margin:4px 0 0}
+.gn-payroll-section-heading>span{font-size:12px;color:#698373;background:#f4f8f4;padding:8px 12px;border-radius:40px}
+.gn-payroll-history-table{min-width:660px;table-layout:auto}
+.gn-payroll-history-table td{padding:15px 12px}
+.gn-payroll-history-table td small{max-width:220px}
+.gn-payroll-history-actions{white-space:nowrap}
+.gn-payroll-history-actions button+button{margin-left:7px}
+.gn-payroll-payslip{width:min(100%,570px)}
+.gn-payroll-total{display:grid;justify-items:start;gap:7px;background:#f5f9f5;border-radius:13px;border:1px solid #e3ece4;padding:18px;margin:10px 0}
+.gn-payroll-total>span:first-child{font-size:12px;color:#718779}
+.gn-payroll-total strong{font-family:Georgia,serif;font-size:32px;color:#153c30;font-variant-numeric:tabular-nums}
+.gn-payroll-breakdown{display:grid;gap:0;margin:15px 0}
+.gn-payroll-breakdown>div{display:flex;justify-content:space-between;gap:15px;padding:11px 3px;border-bottom:1px solid #e9efea;font-size:13px}
+.gn-payroll-breakdown dt{color:#718579}.gn-payroll-breakdown dd{margin:0;color:#204737;font-weight:700;font-variant-numeric:tabular-nums}
+.gn-payroll-breakdown>div:last-child{font-weight:700;border-top:2px solid #dbe8dc}
+.gn-payroll-evidence{margin:15px 0;padding:13px 14px;border-radius:10px;background:#fafbf8;border:1px solid #e4eae2;color:#244737}
+.gn-payroll-evidence>strong{font-size:13px}.gn-payroll-evidence p{font-size:12px;color:#60776a;line-height:1.6;margin:8px 0 0}
+.gn-payroll-note{white-space:pre-wrap;overflow-wrap:anywhere;max-height:175px;overflow-y:auto}
+@media(max-width:650px){.gn-payroll-history-table{min-width:600px}.gn-payroll-total strong{font-size:26px}}

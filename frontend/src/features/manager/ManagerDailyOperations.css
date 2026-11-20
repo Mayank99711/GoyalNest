@@ -1,0 +1,147 @@
+.mdo-page {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+  max-width: 1250px;
+}
+
+.mdo-header,
+.mdo-record-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mdo-header h2 {
+  font-family: Georgia, serif;
+  color: #173f34;
+  margin: 0 0 8px;
+}
+
+.mdo-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 15px;
+}
+
+.mdo-stat,
+.mdo-panel {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e2e9e4;
+  border-radius: 15px;
+  padding: 22px;
+}
+
+.mdo-stat {
+  display: grid;
+  gap: 12px;
+}
+
+.mdo-stat span {
+  color: #71867b;
+  font-size: 12px;
+}
+
+.mdo-stat strong {
+  color: #173f34;
+  font-family: Georgia, serif;
+  font-size: 27px;
+}
+
+.mdo-panel h3 {
+  margin: 6px 0 18px;
+  color: #173f34;
+}
+
+.mdo-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.mdo-filters input,
+.mdo-filters select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #dce6dd;
+  border-radius: 10px;
+  background: white;
+  color: #173f34;
+  font: inherit;
+}
+
+.mdo-record {
+  border: 1px solid #e6ece7;
+  border-radius: 12px;
+  padding: 19px;
+  margin-top: 14px;
+}
+
+.mdo-record h4 {
+  color: #173f34;
+  margin: 0;
+}
+
+.mdo-record p {
+  color: #5d7466;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mdo-status {
+  display: inline-block;
+  padding: 7px 11px;
+  border-radius: 20px;
+  background: #edf4ef;
+  color: #205942;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mdo-table-wrap {
+  overflow-x: auto;
+}
+
+.mdo-table-wrap table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.mdo-table-wrap th,
+.mdo-table-wrap td {
+  padding: 15px 11px;
+  text-align: left;
+  border-bottom: 1px solid #e9eeea;
+  font-size: 13px;
+}
+
+.mdo-table-wrap th {
+  color: #71867b;
+}
+
+.mdo-table-wrap td {
+  color: #244b3a;
+}
+
+.mdo-table-wrap td small {
+  display: block;
+  color: #84968b;
+  margin-top: 6px;
+}
+
+@media (max-width: 680px) {
+  .mdo-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .mdo-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

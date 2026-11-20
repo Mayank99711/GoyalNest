@@ -1,0 +1,36 @@
+.gnp-navbar { position: fixed; inset: 0 0 auto; z-index: 1100; height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 clamp(18px, 4vw, 76px); background: #183c32; color: #fff; box-shadow: 0 5px 20px rgba(12,34,28,.17); transition: transform .25s ease; box-sizing: border-box; }
+.gnp-navbar *, .gnp-navbar *::before, .gnp-navbar *::after { box-sizing: border-box; }
+.gnp-navbar.gnp-hidden { transform: translateY(-105%); }
+.gnp-navbar a { color: inherit; text-decoration: none; }
+.gnp-logo { white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; font-family: Georgia,serif; font-size: 23px; font-weight: 700; }
+.gnp-logo span { color: #d9bd85; }
+.gnp-links { display:flex; align-items:center; gap:clamp(12px,2vw,30px); }
+.gnp-links a { font-size:13px; font-weight:600; opacity:.9; }
+.gnp-links a:hover, .gnp-links a:focus-visible { opacity:1; color:#e9cf9d; }
+.gnp-actions { display:flex; align-items:center; gap:14px; }
+.gnp-account { position:relative; }
+.gnp-account-trigger,.gnp-get-started { display:flex;align-items:center;gap:8px;border:1px solid #d2b987;background:#f5efe4;color:#183c32!important;padding:11px 15px;border-radius:22px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap; }
+.gnp-signin { display:flex;gap:7px;align-items:center;font-size:13px;font-weight:700;white-space:nowrap; }
+.gnp-account-menu { position:absolute;right:0;top:calc(100% + 9px);background:#fff;color:#173e33;border:1px solid #dfe7df;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.17);padding:8px;min-width:235px; }
+.gnp-account-menu a { display:flex;align-items:center;gap:9px;padding:11px 12px;font-size:13px;font-weight:700;border-radius:7px; }
+.gnp-account-menu a:hover { background:#edf5ef; }
+.gnp-mobile-toggle { display:none; background:transparent;border:0;color:#fff;cursor:pointer;padding:7px; }
+.gnp-mobile-menu { position:absolute;top:100%;left:0;right:0;background:#183c32;box-shadow:0 10px 20px rgba(0,0,0,.15);padding:12px 24px 21px;display:flex;flex-direction:column;gap:0; }
+.gnp-mobile-menu a { display:block;padding:12px 4px;border-bottom:1px solid rgba(255,255,255,.12);font-size:14px; }
+.gnp-mobile-menu a:last-child { color:#e5ca95; }
+.gnp-navbar :focus-visible { outline:3px solid #ddb973;outline-offset:3px; }
+@media(max-width:1100px) { .gnp-links {gap:12px;} .gnp-links a {font-size:12px;} }
+@media(max-width:850px) { .gnp-navbar {height:68px;} .gnp-links,.gnp-actions {display:none;} .gnp-mobile-toggle {display:block;} .gnp-logo {font-size:21px;} }
+@media(prefers-reduced-motion:reduce) { .gnp-navbar {transition:none;} }
+/* A public-only spacer keeps content visible under the fixed header. Portal views don't mount it. */
+.gnp-public-content { padding-top:78px; }
+@media(max-width:850px) { .gnp-public-content {padding-top:68px;} }
+.gnp-public-content.gnp-home-content {padding-top:0;}
+.gnp-home-content .gnl-hero {padding-top:78px;}
+@media(max-width:850px) { .gnp-home-content .gnl-hero {padding-top:68px;} }
+
+.gnp-home-content [id^="gnl-"] { scroll-margin-top: 85px; }
+
+/* Truncate long personal names without pushing public navigation off-screen. */
+.gnp-account-name { display:block; max-width: 190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gnp-mobile-account-name { display:block; font-size:13px; font-weight:600; color:#f5efe4; padding:12px 4px 5px; overflow-wrap:anywhere; }
