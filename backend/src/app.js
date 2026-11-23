@@ -1,3 +1,4 @@
+import staffWorkspaceRoutes from "./modules/team/staffWorkspace.routes.js";
 import offlinePayments from "./modules/payments/offlinePayments.routes.js";
 import categoryRoutes from "./modules/properties/categories.routes.js";
 import ownerEmployeesRoutes from "./modules/team/ownerEmployees.routes.js";
@@ -104,6 +105,7 @@ app.use("/api/gateway-payments", gatewayPayments);
 app.use("/api/refund-review", refundReview);
 app.use("/api/reports", reports);
 app.use("/api/manager-assignments", managerAssignments);
+app.use("/api/staff-workspace", staffWorkspaceRoutes);
 app.use("/api/manager-portal", managerPortal);
 app.use("/api/owner-checkout", ownerCheckoutRoutes);
 app.use("/api/invoice-reconciliation", invoiceReconciliation);

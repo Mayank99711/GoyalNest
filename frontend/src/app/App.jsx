@@ -1,3 +1,4 @@
+import StaffWorkspace from "../features/manager/StaffWorkspace";
 import ActivityToastHost from "../components/ActivityToastHost";
 import OwnerEmployees from "../features/owner/OwnerEmployees";
 import AdminCategories from "../features/admin/AdminCategories";
@@ -139,12 +140,27 @@ function DashboardShell() {
     return <Navigate to="/login" replace />;
   }
 
-  const sections = roleNavigation[user.role] || [];
+  const isLimitedStaff = user.role === "MANAGER" && user.designation && user.designation.trim().toLowerCase() !== "property manager";
+  const displayRole = user.designation && user.role === "MANAGER" ? user.designation : roleLabels[user.role];
+  const staffPages = [
+    { id: "properties", right: "properties.view", label: "Assigned Properties", icon: "⌂" },
+    { id: "rooms", right: "rooms.view", label: "Rooms & Occupancy", icon: "▦" },
+    { id: "bookings", right: "bookings.view", label: "Bookings", icon: "✓" },
+    { id: "tenants", right: "tenants.view", label: "Tenant Records", icon: "♧" },
+    { id: "maintenance", right: "maintenance.view", label: "Maintenance Tickets", icon: "⚒" },
+    { id: "payments", right: "payments.view", label: "Payments", icon: "₹" },
+    { id: "reports", right: "reports.view", label: "Reports", icon: "▥" },
+  ];
+  const sections = isLimitedStaff ? [{ group: "EMPLOYEE WORKSPACE", items: [
+    { id: "dashboard", label: "Overview", icon: "◈" },
+    ...staffPages.filter(item => (user.staffPermissions || []).includes(item.right)),
+    { id: "notifications", label: "Notifications", icon: "♢" },
+  ] }] : (roleNavigation[user.role] || []);
   const requestedPage = page || "dashboard";
 
-  const currentPage = (requestedPage === "notifications" || Boolean(findNavigationItem(user.role, requestedPage))) ? requestedPage : "dashboard";
+  const currentPage = (requestedPage === "notifications" || sections.some(section => section.items.some(item => item.id === requestedPage))) ? requestedPage : "dashboard";
 
-  const currentItem = findNavigationItem(user.role, currentPage);
+  const currentItem = sections.flatMap(section => section.items).find(item => item.id === currentPage);
   const Dashboard = dashboards[user.role];
 
   function changePage(nextPage) {
@@ -162,6 +178,9 @@ function DashboardShell() {
   }
 
   function renderContent() {
+    if (isLimitedStaff && staffPages.some(item => item.id === currentPage)) {
+      return <StaffWorkspace section={currentPage} />;
+    }
     // TENANT_TENANCY_PRO_V1: New tenant-only workspace; all other portals unchanged.
     if (user.role === "TENANT" && ["tenancy", "tenancies"].includes(currentPage)) {
       return <TenantTenancyPro />;
@@ -170,7 +189,7 @@ function DashboardShell() {
     if (currentPage === "agreements" && ["OWNER", "TENANT", "ADMIN"].includes(user.role)) {
       return <AgreementWorkspace />;
     }
-    if (currentPage === "dashboard") return <PortalOverviews role={user.role} />;
+    if (currentPage === "dashboard") return <PortalOverviews role={user.role} limitedStaff={isLimitedStaff} designation={displayRole} />;
     if (user.role === "TENANT" && ["rent", "payments"].includes(currentPage)) return <TenantPaymentHub />;
     if (user.role === "OWNER" && ["subscriptions", "my-subscription"].includes(currentPage)) return <CheckoutPortal />;
     if (["TENANT", "OWNER"].includes(user.role) && ["rent", "payments", "collections"].includes(currentPage)) return <PaymentCentre />;
@@ -523,7 +542,7 @@ if (
 
             <span>
               <b>{user.name}</b>
-              <small>{roleLabels[user.role]}</small>
+              <small>{displayRole}</small>
             </span>
           </div>
 
@@ -547,13 +566,13 @@ if (
 
             <h1>
               {currentPage === "dashboard"
-                ? `${roleLabels[user.role]} dashboard`
+                ? `${displayRole} dashboard`
                 : currentItem?.label}
             </h1>
           </div>
 
           <div className="topbar-right">
-            <PortalNotificationBell role={user.role} />
+            <PortalNotificationBell role={isLimitedStaff ? "STAFF" : user.role} />
             <span className="date-label">
               A BETTER WAY TO LIVE
             </span>

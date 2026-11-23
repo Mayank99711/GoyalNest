@@ -16,11 +16,13 @@ import {
   fingerprintOtp,
 } from "./auth.service.js";
 const router = Router();
-const publicUser = (u) => ({
+const publicUser = (u, staff = null) => ({
   id: u.id,
   name: u.name,
   email: u.email,
   role: u.role,
+  designation: staff?.designation || null,
+  staffPermissions: staff ? (Array.isArray(staff.permissions) ? staff.permissions : []) : null,
   verified: u.verified,
 });
 router.post(
@@ -257,6 +259,10 @@ router.post(
         if (err.status) throw err;
       }
     }
+    if (u.role === "MANAGER") {
+      const employee = await prisma.ownerEmployee.findFirst({ where: { managerUserId: u.id }, select: { active: true } });
+      if (employee && !employee.active) fail(403, "Employee account disabled");
+    }
     const token = jwt.sign({ id: u.id, role: u.role }, env.jwtSecret, {
       expiresIn: "7d",
     });
@@ -266,14 +272,16 @@ router.post(
       secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 86400000,
     });
-    res.json({ user: publicUser(u) });
+    const staff = u.role === "MANAGER" ? await prisma.ownerEmployee.findFirst({where:{managerUserId:u.id,active:true},select:{designation:true,permissions:true}}) : null;
+    res.json({ user: publicUser(u, staff) });
   }),
 );
 router.post("/logout", (req, res) => {
   res.clearCookie("goyalnest_session");
   res.json({ message: "Signed out" });
 });
-router.get("/me", authenticate, (req, res) =>
-  res.json({ user: publicUser(req.user) }),
-);
+router.get("/me", authenticate, asyncRoute(async (req, res) => {
+  const staff = req.user.role === "MANAGER" ? await prisma.ownerEmployee.findFirst({where:{managerUserId:req.user.id,active:true},select:{designation:true,permissions:true}}) : null;
+  res.json({ user: publicUser(req.user, staff) });
+}));
 export default router;

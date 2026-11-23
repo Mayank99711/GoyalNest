@@ -4,6 +4,7 @@ const safeRole = role => String(role || "").toUpperCase();
 export function notificationTarget(type, role) {
   const t = String(type || "").toUpperCase();
   const r = safeRole(role);
+  if (r === "STAFF") return "/dashboard/notifications";
   if (t.startsWith("AGREEMENT_")) return r === "TENANT" || r === "OWNER" ? "/dashboard/agreements" : "/dashboard/notifications";
   if (t.startsWith("KYC_")) return r === "ADMIN" ? "/dashboard/agreements#gn-kyc-review" : r === "TENANT" ? "/dashboard/kyc" : r === "OWNER" ? "/dashboard/agreements" : "/dashboard/notifications";
   if (t.startsWith("BOOKING_")) return r === "OWNER" || r === "TENANT" ? "/dashboard/bookings" : r === "MANAGER" ? "/dashboard/checkin" : "/dashboard/notifications";
@@ -17,6 +18,7 @@ export function notificationTarget(type, role) {
   return "/dashboard/notifications";
 }
 export function notificationActionLabel(type, role) {
+  if (safeRole(role) === "STAFF") return "View notification";
   const t = String(type || "").toUpperCase();
   if (t.startsWith("AGREEMENT_")) return safeRole(role) === "TENANT" ? "Review agreement" : "View agreement";
   if (t.startsWith("KYC_")) return safeRole(role) === "ADMIN" ? "Review KYC" : "View KYC status";
@@ -27,7 +29,7 @@ export function notificationActionLabel(type, role) {
   return "Open related section";
 }
 export function notificationNeedsAction(item, role) {
-  if (item?.source === "announcement") return false;
+  if (item?.source === "announcement" || safeRole(role) === "STAFF") return false;
   const t = String(item?.type || "").toUpperCase();
   if (t === "AGREEMENT_PUBLISHED" && safeRole(role) === "TENANT") return true;
   if (t === "KYC_SUBMITTED" && safeRole(role) === "ADMIN") return true;

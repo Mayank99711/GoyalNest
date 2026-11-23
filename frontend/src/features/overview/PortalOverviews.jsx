@@ -159,10 +159,27 @@ function ManagerOverview() {
     tasks={tasks} links={[{to:'checkin',title:'Check-in / check-out',description:'Verify tenant arrivals and departures'},{to:'properties',title:'Assigned properties',description:'View permitted property locations'},{to:'occupancy',title:'Rooms & occupancy',description:'Monitor unit utilization'},{to:'maintenance',title:'Maintenance tickets',description:'Track repairs and service updates'},{to:'tenants',title:'Tenant records',description:'Review on-site tenants'},{to:'reports',title:'Daily reports',description:'Review operational records'}]}/>;
 }
 
-export default function PortalOverviews({ role }) {
+function StaffOverview({designation}) {
+  const properties = useRemote('/staff-workspace');
+  const notifications = useRemote('/user-notifications');
+  return <OverviewShell
+    title={`${designation} workspace`}
+    description="Access the read-only modules your Project Owner has assigned to you."
+    loading={properties.busy}
+    error={properties.error}
+    onRefresh={()=>{properties.reload();notifications.reload();}}
+    notices={array(notifications.data?.notifications)}
+    noticesLoading={notifications.busy}
+    tiles={[{label:'Assigned properties',value:properties.data?.assignedProperties??'—',note:'Assigned locations only'}]}
+    tasks={[]}
+    links={[]}
+  />;
+}
+
+export default function PortalOverviews({ role, limitedStaff=false, designation="Staff" }) {
   if (role === "ADMIN") return <AdminOverview />;
   if (role === "OWNER") return <OwnerOverview />;
   if (role === "TENANT") return <TenantOverview />;
-  if (role === "MANAGER") return <ManagerOverview />;
+  if (role === "MANAGER") return limitedStaff ? <StaffOverview designation={designation} /> : <ManagerOverview />;
   return null;
 }

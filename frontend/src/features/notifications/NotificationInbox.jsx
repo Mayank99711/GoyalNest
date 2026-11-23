@@ -8,7 +8,7 @@ import { notificationTarget, notificationActionLabel, notificationNeedsAction } 
 
 export default function NotificationInbox() {
   const { user } = useAuth();
-  const role = user?.role;
+  const role = user?.role === "MANAGER" && user?.designation?.trim().toLowerCase() !== "property manager" ? "STAFF" : user?.role;
   const [items, setItems] = useState([]);
   const [unread, setUnread] = useState(0);
   const [busy, setBusy] = useState("");

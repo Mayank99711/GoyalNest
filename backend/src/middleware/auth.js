@@ -9,6 +9,29 @@ export async function authenticate(req, res, next) {
     const payload = jwt.verify(token, env.jwtSecret);
     const user = await prisma.user.findUnique({ where: { id: payload.id } });
     if (!user || !user.active) fail(401, "Session invalid");
+    // Owner-created employee accounts reuse the MANAGER login role. All staff
+    // business reads are served by the explicit, permission-checked workspace.
+    if (user.role === "MANAGER") {
+      const employee = await prisma.ownerEmployee.findFirst({
+        where: { managerUserId: user.id },
+        select: { designation: true, permissions: true, active: true },
+      });
+      if (employee) {
+        if (!employee.active) fail(403, "Employee account disabled");
+        const path = req.originalUrl.split("?")[0].replace(/\/$/, "");
+        const personal = path === "/api/auth/me" ||
+          path === "/api/auth/logout" ||
+          path === "/api/user-notifications" ||
+          (req.method === "GET" && path === "/api/platform-notifications/mine") ||
+          (req.method === "POST" && /^\/api\/platform-notifications\/[^/]+\/read$/.test(path)) ||
+          /^\/api\/user-notifications\/[^/]+\/read$/.test(path);
+        const workspace = path === "/api/staff-workspace" ||
+          /^\/api\/staff-workspace\/(properties|rooms|bookings|tenants|maintenance|payments|reports)$/.test(path);
+        // No legacy manager operations for staff: their endpoints can expose
+        // additional data/actions not covered by the 7 view permissions.
+        if (!personal && !workspace) fail(403, "Not permitted for employee workspace");
+      }
+    }
     req.user = user;
     next();
   } catch (err) {
