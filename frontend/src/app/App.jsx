@@ -1,3 +1,4 @@
+import EmployeeHR from "../features/manager/EmployeeHR";
 import StaffWorkspace from "../features/manager/StaffWorkspace";
 import ActivityToastHost from "../components/ActivityToastHost";
 import OwnerEmployees from "../features/owner/OwnerEmployees";
@@ -154,6 +155,8 @@ function DashboardShell() {
   const sections = isLimitedStaff ? [{ group: "EMPLOYEE WORKSPACE", items: [
     { id: "dashboard", label: "Overview", icon: "◈" },
     ...staffPages.filter(item => (user.staffPermissions || []).includes(item.right)),
+    { id: "attendance", label: "My Attendance", icon: "✓" },
+    { id: "payslips", label: "My Salary & Payslips", icon: "₹" },
     { id: "notifications", label: "Notifications", icon: "♢" },
   ] }] : (roleNavigation[user.role] || []);
   const requestedPage = page || "dashboard";
@@ -178,6 +181,7 @@ function DashboardShell() {
   }
 
   function renderContent() {
+    if (isLimitedStaff && ["attendance", "payslips"].includes(currentPage)) return <EmployeeHR section={currentPage} />;
     if (isLimitedStaff && staffPages.some(item => item.id === currentPage)) {
       return <StaffWorkspace section={currentPage} />;
     }

@@ -70,15 +70,23 @@ r.get("/payroll/preview",asyncRoute(async(req,res)=>{
  res.json(employees.map(e=>calculatePayrollPreview(e,q.period,entries.filter(a=>a.employeeId===e.id))));
 }));
 r.post("/payroll",asyncRoute(async(req,res)=>{
- const d=parse(z.object({employeeId:z.string(),period:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),allowance:z.number().int().min(0).max(10000000).default(0),deduction:z.number().int().min(0).max(10000000).default(0),note:z.string().max(500).default(""),attendanceReviewed:z.literal(true)}).strict(),req.body);
+ const d=parse(z.object({employeeId:z.string(),period:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),allowance:z.number().int().min(0).max(10000000).default(0),deduction:z.number().int().min(0).max(10000000).default(0),note:z.string().max(500).default(""),attendanceReviewed:z.literal(true),calculationMode:z.enum(["RECORDED_PAID_DAYS","FIXED_MONTHLY"]),missingDaysAcknowledged:z.boolean().default(false)}).strict(),req.body);
  const employee=await prisma.ownerEmployee.findFirst({where:{id:d.employeeId,ownerId:req.user.id,active:true}});required(employee,"Employee not available",403);
  const from=new Date(d.period+"-01T00:00:00.000Z"),to=new Date(Date.UTC(Number(d.period.slice(0,4)),Number(d.period.slice(5,7)),1));
  const attendance=await prisma.employeeAttendance.findMany({where:{employeeId:employee.id,ownerId:req.user.id,workDate:{gte:from,lt:to}}});
- const preview=calculatePayrollPreview(employee,d.period,attendance,d.allowance,d.deduction);
+ const preview=calculatePayrollPreview(employee,d.period,attendance,d.allowance,d.deduction,new Date(),d.calculationMode);
+ required(preview.daysRecorded>0,"Record and review attendance before generating salary",409);
+ required(preview.unrecordedElapsedDays===0||d.missingDaysAcknowledged,"Review and explicitly acknowledge missing attendance before generating a draft",409);
  const deduction=preview.deduction;
  required(deduction<=employee.basicSalary+d.allowance,"Deductions cannot exceed total pay",400);
- const note=[d.note,`Payroll snapshot: ${preview.daysRecorded}/${preview.daysElapsed} elapsed calendar days recorded; unpaid equivalent ${preview.unpaidDays}; attendance deduction INR ${preview.attendanceDeduction}; manual deduction INR ${d.deduction}.`,preview.unrecordedElapsedDays?"Attendance incomplete at generation; owner acknowledged. Missing days were NOT treated as absent.":"Attendance reviewed by owner."].filter(Boolean).join(" | ").slice(0,1200);
- res.status(201).json(await prisma.salaryRecord.create({data:{ownerId:req.user.id,employeeId:employee.id,period:d.period,basic:employee.basicSalary,allowance:d.allowance,deduction,note}}));
+ const note=[d.note,`Calculation mode: ${d.calculationMode}; payable days ${preview.payableDays}/${preview.calendarDays}; `,`Payroll snapshot: ${preview.daysRecorded}/${preview.daysElapsed} elapsed calendar days recorded; unpaid equivalent ${preview.unpaidDays}; attendance deduction INR ${preview.attendanceDeduction}; manual deduction INR ${d.deduction}.`,preview.unrecordedElapsedDays?"Attendance incomplete at generation; owner explicitly acknowledged. In recorded-paid-days mode unrecorded days did not earn pay, but were NOT marked absent.":"Attendance reviewed by owner."].filter(Boolean).join(" | ").slice(0,1200);
+ const record = await prisma.$transaction(async tx => {
+   const saved = await tx.salaryRecord.create({data:{ownerId:req.user.id,employeeId:employee.id,period:d.period,basic:employee.basicSalary,allowance:d.allowance,deduction,note}});
+   await notifyUsers(tx,{userIds:[employee.managerUserId],type:"PAYROLL_DRAFT_CREATED",referenceId:saved.id,
+     title:"Monthly salary draft available",message:`Your ${d.period} salary draft is ready to review and download in My Salary & Payslips. Payment has not been recorded.`});
+   return saved;
+ });
+ res.status(201).json(record);
 }));
 r.patch("/payroll/:id",asyncRoute(async(req,res)=>{
  const d=parse(z.object({markPaid:z.literal(true),paymentRecorded:z.literal(true),paymentMethod:z.enum(["BANK_TRANSFER","CASH","CHEQUE","OTHER"]),paymentReference:z.string().trim().min(3).max(120),note:z.string().max(500).optional()}),req.body);

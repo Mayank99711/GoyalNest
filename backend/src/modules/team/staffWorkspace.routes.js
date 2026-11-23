@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { prisma } from "../../config/prisma.js";
 import { authenticate, roles } from "../../middleware/auth.js";
-import { asyncRoute, fail } from "../../lib/errors.js";
+import { asyncRoute, fail, required } from "../../lib/errors.js";
+import { notifyUsers } from "../notifications/notify.service.js";
 
 const router = Router();
 const rights = ["properties.view", "rooms.view", "bookings.view", "tenants.view", "maintenance.view", "payments.view", "reports.view"];
@@ -10,7 +11,7 @@ router.use(authenticate, roles("MANAGER"));
 router.use(asyncRoute(async (req, _res, next) => {
   const employee = await prisma.ownerEmployee.findFirst({
     where: { managerUserId: req.user.id, active: true },
-    select: { designation: true, permissions: true },
+    select: { id: true, ownerId: true, designation: true, permissions: true },
   });
   if (!employee) fail(403, "Employee workspace unavailable");
   const assignments = await prisma.managerAssignment.findMany({
@@ -18,10 +19,68 @@ router.use(asyncRoute(async (req, _res, next) => {
     select: { propertyId: true },
   });
   req.staff = {
+    employeeId: employee.id, ownerId: employee.ownerId, designation: employee.designation,
     permissions: Array.isArray(employee.permissions) ? employee.permissions.filter(p => rights.includes(p)) : [],
     ids: assignments.map(x => x.propertyId),
   };
   next();
+}));
+
+// Attendance is an employee's own check-in, never an owner-certified payroll approval.
+// IST calendar date is used consistently to avoid client locale/UTC date rollovers.
+const istDate = () => new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit"
+}).format(new Date());
+const validPeriod = p => /^\d{4}-(0[1-9]|1[0-2])$/.test(String(p || ""));
+const range = period => ({
+  gte: new Date(`${period}-01T00:00:00.000Z`),
+  lt: new Date(Date.UTC(Number(period.slice(0, 4)), Number(period.slice(5, 7)), 1)),
+});
+router.get("/me/attendance", asyncRoute(async (req, res) => {
+  const period = String(req.query.period || istDate().slice(0, 7));
+  required(validPeriod(period), "Invalid attendance month", 400);
+  const rows = await prisma.employeeAttendance.findMany({
+    where: { employeeId: req.staff.employeeId, ownerId: req.staff.ownerId, workDate: range(period) },
+    select: { id: true, workDate: true, status: true, note: true, updatedAt: true },
+    orderBy: { workDate: "desc" }, take: 31,
+  });
+  res.set("Cache-Control", "private, no-store");
+  res.json({ period, timezone: "Asia/Kolkata", rows });
+}));
+router.post("/me/attendance", asyncRoute(async (req, res) => {
+  // A single self-attested PRESENT check-in per local day; no backdating or absence editing.
+  const today = istDate();
+  required(req.body && Object.keys(req.body).every(k => k === "workDate") &&
+    (!req.body.workDate || req.body.workDate === today), "Only today's attendance can be marked", 400);
+  const day = new Date(`${today}T00:00:00.000Z`);
+  const existing = await prisma.employeeAttendance.findUnique({
+    where: { employeeId_workDate: { employeeId: req.staff.employeeId, workDate: day } },
+  });
+  required(!existing, "Attendance already recorded for today; contact Project Owner for a correction", 409);
+  // Unique database constraint handles simultaneous requests; duplicate Prisma P2002 becomes conflict.
+  let row;
+  try {
+    row = await prisma.$transaction(async tx => {
+      const created = await tx.employeeAttendance.create({ data: {
+      employeeId: req.staff.employeeId, ownerId: req.staff.ownerId,
+      workDate: day, status: "PRESENT", note: "Employee self-attested check-in (Asia/Kolkata)",
+      }});
+      await notifyUsers(tx, {userIds:[req.staff.ownerId],type:"EMPLOYEE_ATTENDANCE_MARKED",referenceId:created.id,
+        title:"Employee attendance marked",message:`${req.staff.designation} marked attendance for ${today}. Review in Employee Management.`});
+      return created;
+    });
+  } catch (e) { if (e.code === "P2002") fail(409, "Attendance already recorded for today"); throw e; }
+  res.set("Cache-Control", "private, no-store");
+  res.status(201).json({ id: row.id, workDate: row.workDate, status: row.status, message: "Attendance marked; available to the Project Owner" });
+}));
+router.get("/me/payroll", asyncRoute(async (req, res) => {
+  const rows = await prisma.salaryRecord.findMany({
+    where: { ownerId: req.staff.ownerId, employeeId: req.staff.employeeId },
+    select: { id: true, period: true, basic: true, allowance: true, deduction: true, status: true, paidAt: true, note: true, createdAt: true },
+    orderBy: [{ period: "desc" }, { createdAt: "desc" }], take: 60,
+  });
+  res.set("Cache-Control", "private, no-store");
+  res.json({ rows });
 }));
 const table = (req, key, records) => {
   if (!req.staff.permissions.includes(modules[key])) fail(403, "Access not granted by Project Owner");

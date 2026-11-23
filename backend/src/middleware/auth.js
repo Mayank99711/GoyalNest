@@ -26,6 +26,7 @@ export async function authenticate(req, res, next) {
           (req.method === "POST" && /^\/api\/platform-notifications\/[^/]+\/read$/.test(path)) ||
           /^\/api\/user-notifications\/[^/]+\/read$/.test(path);
         const workspace = path === "/api/staff-workspace" ||
+          /^\/api\/staff-workspace\/me\/(attendance|payroll)$/.test(path) ||
           /^\/api\/staff-workspace\/(properties|rooms|bookings|tenants|maintenance|payments|reports)$/.test(path);
         // No legacy manager operations for staff: their endpoints can expose
         // additional data/actions not covered by the 7 view permissions.
