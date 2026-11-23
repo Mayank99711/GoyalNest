@@ -17,7 +17,7 @@ const notes = note => {
 export default function EmployeeHR({section}) {
   const { user } = useAuth();
   const [month,setMonth] = useState(localDay().slice(0,7));
-  const [state,setState] = useState({rows:[],loading:true,error:""});
+  const [state,setState] = useState({rows:[],requests:[],loading:true,error:""});
   const [saving,setSaving] = useState(false);
   const [message,setMessage] = useState("");
   const [selected,setSelected] = useState(null);
@@ -26,34 +26,35 @@ export default function EmployeeHR({section}) {
     setState(s=>({...s,loading:true,error:""}));
     try {
       const result = await api(isAttendance?`/staff-workspace/me/attendance?period=${month}`:"/staff-workspace/me/payroll");
-      setState({rows:result.rows||[],loading:false,error:""});
-    } catch(e){setState({rows:[],loading:false,error:e.message});}
+      setState({rows:result.rows||[],requests:result.requests||[],loading:false,error:""});
+    } catch(e){setState({rows:[],requests:[],loading:false,error:e.message});}
   },[isAttendance,month]);
   useEffect(()=>{load();},[load]);
   async function checkIn(){
     if(saving)return;
     setSaving(true);setMessage("");
     try {await api("/staff-workspace/me/attendance",{method:"POST",body:{workDate:localDay()}});
-      setMessage("Today's check-in saved. Project Owner can see it in Attendance.");await load();
+      setMessage("Attendance request submitted. It will count only after Project Owner approves.");await load();
     }catch(e){setMessage(e.message);}finally{setSaving(false);}
   }
   const today = localDay();
-  const checkedToday = state.rows.some(row=>String(row.workDate).slice(0,10)===today);
+  const checkedToday = [...state.rows,...state.requests].some(row=>String(row.workDate).slice(0,10)===today);
   const formatDate = v => v ? String(v).slice(0,10) : "—";
   return <div className="gn-workbench"><section className="gn-surface">
     <header className="gn-work-head"><div><h2>{isAttendance?"My Attendance":"My Salary & Payslips"}</h2>
-      <p>{isAttendance?`Self-attested attendance · ${tz} · Project Owner can review and correct records.`:"Owner-generated salary records · draft does not mean paid."}</p></div>
+      <p>{isAttendance?`Attendance requests require Project Owner approval · ${tz}.`:"Owner-generated salary records · draft does not mean paid."}</p></div>
       <button className="btn outline" type="button" onClick={load}>Refresh</button></header>
     {state.error&&<p role="alert" className="gn-work-alert">{state.error}</p>}
     {message&&<p role="status" className="gn-safe-note">{message}</p>}
     {isAttendance ? <>
       <div className="gn-toolbar"><label>Attendance month <input type="month" value={month} onChange={e=>setMonth(e.target.value)} /></label>
       <button className="btn primary" disabled={saving||checkedToday||state.loading||month!==today.slice(0,7)} onClick={checkIn}>
-        {saving?"Saving...":checkedToday?"Today's attendance recorded":"Mark present today"}</button></div>
-      <p className="gn-safe-note">You can only mark yourself PRESENT for today's India date. Unmarked days are not automatically absences. For leave, half-day or corrections, contact Project Owner.</p>
+        {saving?"Saving...":checkedToday?"Today's request/attendance exists":"Request attendance approval"}</button></div>
+      <p className="gn-safe-note">You may request attendance for today only. The request does not count as PRESENT or towards payroll until the Project Owner approves it. For corrections contact your Project Owner.</p>
       {state.loading?<p>Loading attendance...</p>:<div className="gn-table-scroll"><table className="gn-table"><thead><tr><th>Date</th><th>Status</th><th>Record source / note</th></tr></thead><tbody>
-      {state.rows.map(r=><tr key={r.id}><td>{formatDate(r.workDate)}</td><td>{human(r.status)}</td><td>{r.note||"—"}</td></tr>)}
-      {!state.rows.length&&<tr><td colSpan="3" className="gn-empty">No attendance recorded for this month.</td></tr>}</tbody></table></div>}
+      {state.requests.map(r=><tr key={r.id}><td>{formatDate(r.workDate)}</td><td>{r.status === "PENDING" ? "Pending Owner approval" : r.status === "REJECTED" ? "Rejected" : "Approved"}</td><td>{r.reviewNote || (r.status === "PENDING" ? "Awaiting review — not counted in payroll" : "Reviewed by Owner")}</td></tr>)}
+      {state.rows.filter(r=>!state.requests.some(q=>formatDate(q.workDate)===formatDate(r.workDate))).map(r=><tr key={r.id}><td>{formatDate(r.workDate)}</td><td>{human(r.status)}</td><td>{r.note||"—"}</td></tr>)}
+      {!state.rows.length&&!state.requests.length&&<tr><td colSpan="3" className="gn-empty">No attendance recorded for this month.</td></tr>}</tbody></table></div>}
     </> : <>
       <p className="gn-safe-note">Payslips appear once Project Owner generates a monthly salary draft. Payment recorded means Owner entered a payment reference; it is not bank verification.</p>
       {state.loading?<p>Loading payroll...</p>:<div className="gn-table-scroll"><table className="gn-table"><thead><tr><th>Pay period</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net payable</th><th>Status</th><th>Actions</th></tr></thead><tbody>

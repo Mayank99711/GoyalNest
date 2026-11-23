@@ -713,3 +713,18 @@ model OwnerDesignation {
  createdAt DateTime @default(now())
  @@unique([ownerId,name])
 }
+
+// Employee self-check-in requests are not payroll attendance until Owner approves.
+model EmployeeAttendanceRequest {
+ id String @id @default(cuid())
+ ownerId String
+ employeeId String
+ workDate DateTime @db.Date
+ status String @default("PENDING") // PENDING | APPROVED | REJECTED
+ requestedAt DateTime @default(now())
+ reviewedAt DateTime?
+ reviewedBy String?
+ reviewNote String @default("")
+ @@unique([employeeId,workDate])
+ @@index([ownerId,status,workDate])
+}

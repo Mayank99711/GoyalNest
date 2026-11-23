@@ -45,33 +45,40 @@ router.get("/me/attendance", asyncRoute(async (req, res) => {
     orderBy: { workDate: "desc" }, take: 31,
   });
   res.set("Cache-Control", "private, no-store");
-  res.json({ period, timezone: "Asia/Kolkata", rows });
+  const requests = await prisma.employeeAttendanceRequest.findMany({
+    where: { employeeId: req.staff.employeeId, ownerId: req.staff.ownerId, workDate: range(period) },
+    select: { id: true, workDate: true, status: true, requestedAt: true, reviewedAt: true, reviewNote: true },
+    orderBy: { workDate: "desc" }, take: 31,
+  });
+  res.json({ period, timezone: "Asia/Kolkata", rows, requests });
 }));
 router.post("/me/attendance", asyncRoute(async (req, res) => {
-  // A single self-attested PRESENT check-in per local day; no backdating or absence editing.
+  // Submission is a request, not payroll-eligible attendance.
   const today = istDate();
   required(req.body && Object.keys(req.body).every(k => k === "workDate") &&
-    (!req.body.workDate || req.body.workDate === today), "Only today's attendance can be marked", 400);
+    (!req.body.workDate || req.body.workDate === today), "Only today's attendance can be requested", 400);
   const day = new Date(`${today}T00:00:00.000Z`);
   const existing = await prisma.employeeAttendance.findUnique({
     where: { employeeId_workDate: { employeeId: req.staff.employeeId, workDate: day } },
   });
-  required(!existing, "Attendance already recorded for today; contact Project Owner for a correction", 409);
-  // Unique database constraint handles simultaneous requests; duplicate Prisma P2002 becomes conflict.
+  required(!existing, "Attendance already recorded for today; ask Project Owner for a correction", 409);
+  const previous = await prisma.employeeAttendanceRequest.findUnique({
+    where: { employeeId_workDate: { employeeId: req.staff.employeeId, workDate: day } },
+  });
+  required(!previous, "Attendance request already submitted today", 409);
   let row;
   try {
     row = await prisma.$transaction(async tx => {
-      const created = await tx.employeeAttendance.create({ data: {
-      employeeId: req.staff.employeeId, ownerId: req.staff.ownerId,
-      workDate: day, status: "PRESENT", note: "Employee self-attested check-in (Asia/Kolkata)",
+      const created = await tx.employeeAttendanceRequest.create({ data: {
+        employeeId: req.staff.employeeId, ownerId: req.staff.ownerId, workDate: day, status: "PENDING",
       }});
-      await notifyUsers(tx, {userIds:[req.staff.ownerId],type:"EMPLOYEE_ATTENDANCE_MARKED",referenceId:created.id,
-        title:"Employee attendance marked",message:`${req.staff.designation} marked attendance for ${today}. Review in Employee Management.`});
+      await notifyUsers(tx, {userIds: [req.staff.ownerId], type: "EMPLOYEE_ATTENDANCE_PENDING", referenceId: created.id,
+        title: "Attendance approval needed", message: `${req.staff.designation} requested attendance for ${today}. Review in Employee Management > Attendance.`});
       return created;
     });
-  } catch (e) { if (e.code === "P2002") fail(409, "Attendance already recorded for today"); throw e; }
+  } catch (e) { if (e.code === "P2002") fail(409, "Attendance request already submitted today"); throw e; }
   res.set("Cache-Control", "private, no-store");
-  res.status(201).json({ id: row.id, workDate: row.workDate, status: row.status, message: "Attendance marked; available to the Project Owner" });
+  res.status(201).json({ id: row.id, workDate: row.workDate, status: "PENDING", message: "Attendance request submitted for Project Owner approval; not counted in payroll yet" });
 }));
 router.get("/me/payroll", asyncRoute(async (req, res) => {
   const rows = await prisma.salaryRecord.findMany({

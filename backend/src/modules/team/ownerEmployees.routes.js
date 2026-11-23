@@ -46,10 +46,46 @@ r.get("/attendance",asyncRoute(async(req,res)=>{
  const from=new Date(period+"-01T00:00:00.000Z");const to=new Date(Date.UTC(Number(period.slice(0,4)),Number(period.slice(5,7)),1));
  const data=await prisma.employeeAttendance.findMany({where:{ownerId:req.user.id,workDate:{gte:from,lt:to}},orderBy:{workDate:"desc"}});res.json(data);
 }));
+r.get("/attendance/requests",asyncRoute(async(req,res)=>{
+ const q=parse(z.object({period:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/)}),req.query);
+ const from=new Date(q.period+"-01T00:00:00.000Z");
+ const to=new Date(Date.UTC(Number(q.period.slice(0,4)),Number(q.period.slice(5,7)),1));
+ const rows=await prisma.employeeAttendanceRequest.findMany({where:{ownerId:req.user.id,workDate:{gte:from,lt:to}},orderBy:{requestedAt:"desc"},take:300});
+ res.set("Cache-Control","private, no-store");res.json(rows);
+}));
+r.post("/attendance/requests/:requestId/review",asyncRoute(async(req,res)=>{
+ const d=parse(z.object({decision:z.enum(["APPROVE","REJECT"]),note:z.string().trim().max(300).default("")}).strict(),req.body);
+ const request=await prisma.employeeAttendanceRequest.findFirst({where:{id:req.params.requestId,ownerId:req.user.id,status:"PENDING"}});
+ required(request,"Pending request not found",404);
+ const employee=await prisma.ownerEmployee.findFirst({where:{id:request.employeeId,ownerId:req.user.id,active:true}});
+ required(employee,"Employee inactive or unavailable",403);
+ // Owner must not modify attendance for a pay period with a locked payroll snapshot.
+ const period=request.workDate.toISOString().slice(0,7);
+ const locked=await prisma.salaryRecord.findUnique({where:{employeeId_period:{employeeId:employee.id,period}}});
+ required(!locked,"Payroll already generated for this month. Use an audited payroll correction process.",409);
+ const result=await prisma.$transaction(async tx=>{
+   // Atomic claim avoids double review; rollback if attendance conflict occurs.
+   const claimed=await tx.employeeAttendanceRequest.updateMany({where:{id:request.id,ownerId:req.user.id,status:"PENDING"},data:{status:d.decision==="APPROVE"?"APPROVED":"REJECTED",reviewedAt:new Date(),reviewedBy:req.user.id,reviewNote:d.note}});
+   required(claimed.count===1,"Request already reviewed",409);
+   if(d.decision==="APPROVE"){
+     const existing=await tx.employeeAttendance.findUnique({where:{employeeId_workDate:{employeeId:employee.id,workDate:request.workDate}}});
+     required(!existing,"Attendance already recorded by Owner. Request was not approved.",409);
+     await tx.employeeAttendance.create({data:{ownerId:req.user.id,employeeId:employee.id,workDate:request.workDate,status:"PRESENT",note:`Approved employee self-check-in by Owner${d.note?": "+d.note:""}`}});
+   }
+   await notifyUsers(tx,{userIds:[employee.managerUserId],type:"EMPLOYEE_ATTENDANCE_REVIEWED",referenceId:request.id,
+     title:d.decision==="APPROVE"?"Attendance approved":"Attendance request rejected",
+     message:`Your attendance request for ${period} (${request.workDate.toISOString().slice(0,10)}) was ${d.decision==="APPROVE"?"approved":"rejected"} by the Project Owner.`});
+   return tx.employeeAttendanceRequest.findUnique({where:{id:request.id}});
+ });
+ res.json(result);
+}));
 r.put("/attendance",asyncRoute(async(req,res)=>{
  const d=parse(z.object({employeeId:z.string(),workDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),status:attStatus,note:z.string().max(300).default("")}).strict(),req.body);
  const date=validDate(d.workDate);required(date,"Invalid attendance date",400);
  const employee=await prisma.ownerEmployee.findFirst({where:{id:d.employeeId,ownerId:req.user.id}});required(employee,"Employee not available",403);
+ const period=d.workDate.slice(0,7);
+ const payroll=await prisma.salaryRecord.findUnique({where:{employeeId_period:{employeeId:employee.id,period}}});
+ required(!payroll,"Payroll already generated for this month. Attendance corrections require an audited payroll revision.",409);
  const row=await prisma.employeeAttendance.upsert({where:{employeeId_workDate:{employeeId:employee.id,workDate:date}},create:{ownerId:req.user.id,employeeId:employee.id,workDate:date,status:d.status,note:d.note},update:{status:d.status,note:d.note}});res.json(row);
 }));
 r.put("/:managerId",asyncRoute(async(req,res)=>{
@@ -74,6 +110,8 @@ r.post("/payroll",asyncRoute(async(req,res)=>{
  const employee=await prisma.ownerEmployee.findFirst({where:{id:d.employeeId,ownerId:req.user.id,active:true}});required(employee,"Employee not available",403);
  const from=new Date(d.period+"-01T00:00:00.000Z"),to=new Date(Date.UTC(Number(d.period.slice(0,4)),Number(d.period.slice(5,7)),1));
  const attendance=await prisma.employeeAttendance.findMany({where:{employeeId:employee.id,ownerId:req.user.id,workDate:{gte:from,lt:to}}});
+ const pendingRequests=await prisma.employeeAttendanceRequest.count({where:{employeeId:employee.id,ownerId:req.user.id,status:"PENDING",workDate:{gte:from,lt:to}}});
+ required(pendingRequests===0,"Review pending attendance requests before generating payroll",409);
  const preview=calculatePayrollPreview(employee,d.period,attendance,d.allowance,d.deduction,new Date(),d.calculationMode);
  required(preview.daysRecorded>0,"Record and review attendance before generating salary",409);
  required(preview.unrecordedElapsedDays===0||d.missingDaysAcknowledged,"Review and explicitly acknowledge missing attendance before generating a draft",409);
