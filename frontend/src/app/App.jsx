@@ -141,7 +141,10 @@ function DashboardShell() {
     return <Navigate to="/login" replace />;
   }
 
-  const isLimitedStaff = user.role === "MANAGER" && user.designation && user.designation.trim().toLowerCase() !== "property manager";
+  // Owner-created employees use the MANAGER login role, regardless of designation.
+  // auth/me returns an array (possibly empty) only for linked employee accounts;
+  // legacy independently managed property managers receive null.
+  const isLimitedStaff = user.role === "MANAGER" && Array.isArray(user.staffPermissions);
   const displayRole = user.designation && user.role === "MANAGER" ? user.designation : roleLabels[user.role];
   const staffPages = [
     { id: "properties", right: "properties.view", label: "Assigned Properties", icon: "⌂" },
